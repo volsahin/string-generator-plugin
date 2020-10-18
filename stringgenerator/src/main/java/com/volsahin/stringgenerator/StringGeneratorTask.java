@@ -81,7 +81,7 @@ public class StringGeneratorTask extends DefaultTask {
     private void generateStringResourceFile(TypeSpec.Builder classBuilder) {
         final JavaFile javaFile = JavaFile.builder(FILE_PACKAGE_NAME, classBuilder.build()).build();
         try {
-            javaFile.writeTo(new File(generationPath + "/generated/source"));
+            javaFile.writeTo(new File(generationPath));
             javaFile.writeTo(System.out);
             System.out.println(generationPath);
         } catch (IOException e) {
