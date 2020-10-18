@@ -1,7 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
-apply plugin: 'com.volsahin.stringgenerator'
+// apply plugin: 'com.volsahin.stringgenerator'
 
 buildscript {
     repositories {
@@ -9,13 +9,15 @@ buildscript {
         mavenLocal()
     }
     dependencies {
-        classpath "com.volsahin:stringgenerator:1.0.0"
+        // classpath "com.volsahin:stringgenerator:1.0.0"
     }
 }
 
+/*
 stringGenerator {
     stringsJsonFile = new File("$projectDir/src/main/assets/strings.json")
 }
+ */
 
 android {
     compileSdkVersion 29
