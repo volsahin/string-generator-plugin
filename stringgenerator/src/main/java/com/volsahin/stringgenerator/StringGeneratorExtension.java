@@ -4,7 +4,7 @@ import java.io.File;
 
 public class StringGeneratorExtension {
 
-    public static final String EXTENSION_NAME = "stringGenerator";
+    public static final String NAME = "stringGenerator";
 
     private File stringsJsonFile;
 
