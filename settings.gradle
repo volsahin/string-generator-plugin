@@ -1,2 +1,3 @@
+include ':stringgenerator'
 include ':app'
 rootProject.name = "String Generator"
