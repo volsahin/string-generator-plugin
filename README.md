@@ -1,7 +1,7 @@
 # Medium Article 
 https://medium.com/@volsahin/android-devs-lets-generate-our-own-strings-json-with-a-gradle-plugin-ecab36beb4a
 
-# Gradle String Generator 
+# Gradle String Generator Plugin
 The idea is to show how to create a gradle plugin which makes class generation in build time.
 
 Let's say we have a strings.json under assets intead of strings.xml under res folder.
