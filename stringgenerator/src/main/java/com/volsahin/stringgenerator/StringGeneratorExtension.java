@@ -1,6 +1,10 @@
 package com.volsahin.stringgenerator;
 
+import org.gradle.api.tasks.InputFile;
+
 import java.io.File;
+
+import javax.annotation.Nullable;
 
 public class StringGeneratorExtension {
 
@@ -8,11 +12,12 @@ public class StringGeneratorExtension {
 
     private File stringsJsonFile;
 
-    public StringGeneratorExtension() {
-
-    }
-
     public File getStringsJsonFile() {
         return stringsJsonFile;
+    }
+
+    @InputFile
+    public void setStringsJsonFile(@Nullable File stringsJsonFile) {
+        this.stringsJsonFile = stringsJsonFile;
     }
 }

@@ -15,6 +15,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.Map;
 
+import javax.annotation.Nullable;
 import javax.lang.model.element.Modifier;
 
 
@@ -24,11 +25,13 @@ public class StringGeneratorTask extends DefaultTask {
 
     private static final String FILE_PACKAGE_NAME = "com.volsahin";
 
-    private static final String RESOURCE_CLASS_NAME = "R";
+    private static final String RESOURCE_CLASS_NAME = "RR";
 
     private static final String STRING_CLASS_NAME = "string";
 
-    private File stringsJsonFile;
+    private StringGeneratorExtension extension;
+
+    private String generationPath;
 
     @TaskAction
     public void execute() {
@@ -52,35 +55,22 @@ public class StringGeneratorTask extends DefaultTask {
     private void createKeyValueVariablesInClass(TypeSpec.Builder ownerClassBuilder) {
         final StringsJsonEntity entity = createStringsJsonEntity();
 
-        for (Map.Entry<String, String> stringKeyValue : entity.getStrings().entrySet()) {
-            ownerClassBuilder.addField(
-                    FieldSpec.builder(String.class, stringKeyValue.getKey())
-                            .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
-                            .initializer("$S", stringKeyValue.getValue())
-                            .build()
-            );
+        if (entity != null) {
+            for (Map.Entry<String, String> stringKeyValue : entity.getStrings().entrySet()) {
+                ownerClassBuilder.addField(
+                        FieldSpec.builder(String.class, stringKeyValue.getKey())
+                                .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
+                                .initializer("$S", stringKeyValue.getValue())
+                                .build()
+                );
+            }
         }
     }
 
+    @Nullable
     private StringsJsonEntity createStringsJsonEntity() {
-        /*
-        String json = "{\n" +
-                "  \"string\" : {\n" +
-                "    \"true_music\": \"Long live heavy metal\",\n" +
-                "    \"my_repo\": \"https://github.com/volsahin\",\n" +
-                "    \"description\" : \"String generator plugin\",\n" +
-                "    \"done\" : \"done\"\n" +
-                "  }\n" +
-                "}";
-
-        return new Gson().fromJson(json, StringsJsonEntity.class);
-
-         */
-
-
-        final JsonReader reader;
         try {
-            reader = new JsonReader(new FileReader(stringsJsonFile));
+            JsonReader reader = new JsonReader(new FileReader(extension.getStringsJsonFile()));
             return new Gson().fromJson(reader, StringsJsonEntity.class);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -91,13 +81,19 @@ public class StringGeneratorTask extends DefaultTask {
     private void generateStringResourceFile(TypeSpec.Builder classBuilder) {
         final JavaFile javaFile = JavaFile.builder(FILE_PACKAGE_NAME, classBuilder.build()).build();
         try {
+            javaFile.writeTo(new File(generationPath + "/generated/source"));
             javaFile.writeTo(System.out);
-        } catch (IOException exception) {
-
+            System.out.println(generationPath);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
-    public void setStringsJsonFile(File stringsJsonFile) {
-        this.stringsJsonFile = stringsJsonFile;
+    public void setExtension(StringGeneratorExtension extension) {
+        this.extension = extension;
+    }
+
+    public void setGenerationPath(@Nullable String generationPath) {
+        this.generationPath = generationPath;
     }
 }
